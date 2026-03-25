@@ -2,6 +2,9 @@
 <html>
 <head>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script>
+        const BACKEND_URL = "{{ backend_url }}";
+    </script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: ui-sans-serif, system-ui, sans-serif; background: transparent; padding: 0.75rem; }
@@ -81,7 +84,8 @@
                         {% set default_mode = 'walking' %}
                     {% endif %}
 
-                    <div class="card-map-area" id="map-{{ loop.index0 }}" onclick="loadRouteMap('{{ loop.index0 }}', '{{ default_mode }}', '{{ user_location }}', '{{ place.encoded_q }}', '{{ frontend_api_key }}')">
+                    {# apiKey removed — loadRouteMap no longer needs it #}
+                    <div class="card-map-area" id="map-{{ loop.index0 }}" onclick="loadRouteMap('{{ loop.index0 }}', '{{ default_mode }}', '{{ user_location }}', '{{ place.encoded_q }}')">
                         <button class="map-pin-btn" id="pin-btn-{{ loop.index0 }}">Show Route Map</button>
                         <div class="map-loading" id="load-{{ loop.index0 }}"><div class="spinner"></div>Loading...</div>
                     </div>
@@ -93,12 +97,13 @@
                         <div class="card-meta-row toggle-group">
                             {% if user_location %}
                                 {% if place.driving_time %}
-                                <button id="btn-driving-{{ loop.index0 }}" class="mode-toggle {% if default_mode == 'driving' %}active{% endif %}" onclick="switchMode('{{ loop.index0 }}', 'driving', '{{ user_location }}', '{{ place.encoded_q }}', '{{ frontend_api_key }}')">
+                                {# apiKey removed from switchMode calls #}
+                                <button id="btn-driving-{{ loop.index0 }}" class="mode-toggle {% if default_mode == 'driving' %}active{% endif %}" onclick="switchMode('{{ loop.index0 }}', 'driving', '{{ user_location }}', '{{ place.encoded_q }}')">
                                     🚗 {{ place.driving_time }}
                                 </button>
                                 {% endif %}
                                 {% if place.walking_time %}
-                                <button id="btn-walking-{{ loop.index0 }}" class="mode-toggle {% if default_mode == 'walking' %}active{% endif %}" onclick="switchMode('{{ loop.index0 }}', 'walking', '{{ user_location }}', '{{ place.encoded_q }}', '{{ frontend_api_key }}')">
+                                <button id="btn-walking-{{ loop.index0 }}" class="mode-toggle {% if default_mode == 'walking' %}active{% endif %}" onclick="switchMode('{{ loop.index0 }}', 'walking', '{{ user_location }}', '{{ place.encoded_q }}')">
                                     🚶‍♂️ {{ place.walking_time }}
                                 </button>
                                 {% endif %}
@@ -135,6 +140,7 @@
     </div>
 
     <script>
+        const MAPS_KEY = "{{ maps_key }}";
         const TOTAL = parseInt("{{ places|length }}", 10);
         let current = 0;
         const track = document.getElementById('track');
@@ -164,41 +170,42 @@
             dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
         }
 
-        function loadRouteMap(idx, mode, origin, dest, apiKey) {
+        // apiKey parameter removed — all Maps Embed calls go through /maps-embed proxy
+        function loadRouteMap(idx, mode, origin, dest) {
             const wrapper = document.getElementById('map-' + idx);
             const loader = document.getElementById('load-' + idx);
             const btn = document.getElementById('pin-btn-' + idx);
             
             if (btn) btn.style.display = 'none';
             if (loader) loader.style.display = 'flex';
-            wrapper.onclick = null; 
+            wrapper.onclick = null;
 
             setTimeout(() => {
                 wrapper.classList.add('loaded');
                 if (loader) loader.style.display = 'none';
                 
                 let embedUrl;
-                // Official Google Maps Embed API URLs
                 if (origin && origin !== "") {
-                    embedUrl = `https://www.google.com/maps/embed/v1/directions?key=${apiKey}&origin=${origin}&destination=${dest}&mode=${mode}`;
+                    embedUrl = `https://www.google.com/maps/embed/v1/directions?key=${MAPS_KEY}&origin=${origin}&destination=${dest}&mode=${mode}`;
                 } else {
-                    embedUrl = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${dest}`;
+                    embedUrl = `https://www.google.com/maps/embed/v1/place?key=${MAPS_KEY}&q=${dest}`;
                 }
                 
-                wrapper.innerHTML = `<iframe id="iframe-${idx}" src="${embedUrl}" allowfullscreen loading="lazy"></iframe>`;
+                wrapper.innerHTML = `<iframe id="iframe-${idx}" src="${embedUrl}" allowfullscreen loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
             }, 300);
         }
 
-        function switchMode(idx, mode, origin, dest, apiKey) {
+        // hit Google Maps directly
+        function switchMode(idx, mode, origin, dest) {
             document.getElementById(`btn-driving-${idx}`)?.classList.remove('active');
             document.getElementById(`btn-walking-${idx}`)?.classList.remove('active');
             document.getElementById(`btn-${mode}-${idx}`)?.classList.add('active');
 
             const iframe = document.getElementById(`iframe-${idx}`);
             if (iframe) {
-                iframe.src = `https://www.google.com/maps/embed/v1/directions?key=${apiKey}&origin=${origin}&destination=${dest}&mode=${mode}`;
+                iframe.src = `https://www.google.com/maps/embed/v1/directions?key=${MAPS_KEY}&origin=${origin}&destination=${dest}&mode=${mode}`;
             } else {
-                loadRouteMap(idx, mode, origin, dest, apiKey);
+                loadRouteMap(idx, mode, origin, dest);
             }
         }
 
