@@ -1,0 +1,16 @@
+# Ignore a specific file
+secrets.txt
+.env
+
+# Ignore an entire folder (add a slash at the end)
+node_modules/
+venv/
+__pycache__/
+
+# Ignore all files of a specific type (use the * wildcard)
+*.log
+*.zip
+
+# Ignore a specific file inside a folder
+build/config.xml
+.webui_secret_key

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: ui-sans-serif, system-ui, sans-serif; background: transparent; padding: 0.75rem; }
+
+        .carousel-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.625rem; border-bottom: 0.5px solid rgba(128,128,128,0.18); margin-bottom: 0.875rem; }
+        .carousel-title { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(128,128,128,0.8); }
+        .carousel-meta { font-size: 12px; color: rgba(128,128,128,0.6); }
+
+        .carousel-track-wrap { overflow: hidden; }
+        .carousel-track { display: flex; gap: 14px; transition: transform 0.32s cubic-bezier(0.4,0,0.2,1); }
+
+        .place-card { flex: 0 0 100%; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.1); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+        @media (prefers-color-scheme: dark) { .place-card { background: #1c1c1e; border-color: rgba(255,255,255,0.1); } }
+
+        .card-map-area { height: 190px; position: relative; background: #f5f5f7; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; border-bottom: 0.5px solid rgba(0,0,0,0.08); overflow: hidden; }
+        @media (prefers-color-scheme: dark) { .card-map-area { background: #2c2c2e; border-bottom-color: rgba(255,255,255,0.08); } }
+        .card-map-area.loaded { padding: 0; }
+        .card-map-area iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: auto; }
+
+        .map-pin-btn { position: relative; z-index: 2; display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 99px; background: #ffffff; border: 0.5px solid rgba(0,0,0,0.15); cursor: pointer; font-size: 13px; font-weight: 500; color: #111; transition: background 0.2s; }
+        .map-pin-btn:hover { background: #f0f0f0; }
+        @media (prefers-color-scheme: dark) { .map-pin-btn { background: #3a3a3c; color: #f5f5f7; border-color: rgba(255,255,255,0.15); } .map-pin-btn:hover { background: #4a4a4c; } }
+
+        .map-loading { position: relative; z-index: 2; display: none; align-items: center; gap: 6px; font-size: 12px; color: rgba(128,128,128,0.7); }
+        .spinner { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid rgba(128,128,128,0.25); border-top-color: rgba(128,128,128,0.8); animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .card-body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 9px; }
+        .card-place-name { font-size: 16px; font-weight: 600; color: #111; line-height: 1.3; }
+        @media (prefers-color-scheme: dark) { .card-place-name { color: #f5f5f7; } }
+
+        .card-address { font-size: 12px; color: rgba(128,128,128,0.85); line-height: 1.5; display: flex; align-items: flex-start; gap: 5px; }
+        .card-meta-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        
+        .badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 99px; border: 0.5px solid rgba(0,0,0,0.1); color: rgba(80,80,80,0.9); background: rgba(0,0,0,0.04); display: flex; align-items: center; gap: 4px; }
+        @media (prefers-color-scheme: dark) { .badge { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); color: rgba(200,200,200,0.9); } }
+        
+        .mode-toggle { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); background: transparent; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 4px; color: #555; }
+        .mode-toggle:hover { background: rgba(0,0,0,0.04); }
+        @media (prefers-color-scheme: dark) { .mode-toggle { border-color: rgba(255,255,255,0.1); color: #ccc; } .mode-toggle:hover { background: rgba(255,255,255,0.05); } }
+        .mode-toggle.active { background: #007aff; color: white; border-color: #007aff; }
+
+        .card-divider { height: 0.5px; background: rgba(0,0,0,0.07); }
+        @media (prefers-color-scheme: dark) { .card-divider { background: rgba(255,255,255,0.07); } }
+
+        .card-actions { display: flex; gap: 8px; }
+        .action-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px 0; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid rgba(0,0,0,0.12); background: transparent; color: #111; transition: background 0.2s; text-decoration: none; }
+        .action-btn:hover { background: rgba(0,0,0,0.04); }
+        @media (prefers-color-scheme: dark) { .action-btn { color: #f5f5f7; border-color: rgba(255,255,255,0.12); } .action-btn:hover { background: rgba(255,255,255,0.06); } }
+
+        .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; }
+        .ctrl-btn { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid rgba(0,0,0,0.12); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, opacity 0.2s; color: #111; }
+        .ctrl-btn:disabled { opacity: 0.25; pointer-events: none; }
+        .ctrl-btn:hover:not(:disabled) { background: rgba(0,0,0,0.05); }
+        @media (prefers-color-scheme: dark) { .ctrl-btn { border-color: rgba(255,255,255,0.12); color: #f5f5f7; } .ctrl-btn:hover:not(:disabled) { background: rgba(255,255,255,0.07); } }
+        
+        .dots { display: flex; gap: 5px; align-items: center; }
+        .dot { width: 5px; height: 5px; border-radius: 99px; background: rgba(128,128,128,0.3); cursor: pointer; transition: width 0.28s ease, background 0.28s ease; }
+        .dot.active { width: 16px; background: #111; }
+        @media (prefers-color-scheme: dark) { .dot.active { background: #f5f5f7; } }
+    </style>
+</head>
+<body>
+    <div id="carousel-root">
+        <div class="carousel-header">
+            <span class="carousel-title">Nearby results</span>
+            <span class="carousel-meta" id="counter">1 of {{ places|length }}</span>
+        </div>
+
+        <div class="carousel-track-wrap">
+            <div class="carousel-track" id="track">
+                
+                {% for place in places %}
+                <div class="place-card">
+                    {% set default_mode = 'driving' %}
+                    {% if user_location and not place.driving_time and place.walking_time %}
+                        {% set default_mode = 'walking' %}
+                    {% endif %}
+
+                    <div class="card-map-area" id="map-{{ loop.index0 }}" onclick="loadRouteMap('{{ loop.index0 }}', '{{ default_mode }}', '{{ user_location }}', '{{ place.encoded_q }}', '{{ frontend_api_key }}')">
+                        <button class="map-pin-btn" id="pin-btn-{{ loop.index0 }}">Show Route Map</button>
+                        <div class="map-loading" id="load-{{ loop.index0 }}"><div class="spinner"></div>Loading...</div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="card-place-name">{{ place.safe_name }}</div>
+                        <div class="card-address">📍 {{ place.safe_address }}</div>
+                        
+                        <div class="card-meta-row toggle-group">
+                            {% if user_location %}
+                                {% if place.driving_time %}
+                                <button id="btn-driving-{{ loop.index0 }}" class="mode-toggle {% if default_mode == 'driving' %}active{% endif %}" onclick="switchMode('{{ loop.index0 }}', 'driving', '{{ user_location }}', '{{ place.encoded_q }}', '{{ frontend_api_key }}')">
+                                    🚗 {{ place.driving_time }}
+                                </button>
+                                {% endif %}
+                                {% if place.walking_time %}
+                                <button id="btn-walking-{{ loop.index0 }}" class="mode-toggle {% if default_mode == 'walking' %}active{% endif %}" onclick="switchMode('{{ loop.index0 }}', 'walking', '{{ user_location }}', '{{ place.encoded_q }}', '{{ frontend_api_key }}')">
+                                    🚶‍♂️ {{ place.walking_time }}
+                                </button>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="card-divider"></div>
+                        
+                        <div class="card-actions">
+                            <a  href="https://www.google.com/maps/dir/?api=1&origin={{ user_location }}&destination={{ place.encoded_q }}&destination_place_id={{ place.place_id }}" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                class="action-btn">
+                                ↗️ Directions
+                            </a>
+                            <a  href="https://www.google.com/maps/search/?api=1&query={{ place.encoded_q }}&query_place_id={{ place.place_id }}" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                class="action-btn">
+                                ℹ️ Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+        </div>
+
+        <div class="carousel-controls">
+            <button class="ctrl-btn" id="prev-btn" onclick="goTo(current-1)" disabled><</button>
+            <div class="dots" id="dots"></div>
+            <button class="ctrl-btn" id="next-btn" onclick="goTo(current+1)">></button>
+        </div>
+    </div>
+
+    <script>
+        const TOTAL = parseInt("{{ places|length }}", 10);
+        let current = 0;
+        const track = document.getElementById('track');
+        const counter = document.getElementById('counter');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const dotsEl = document.getElementById('dots');
+
+        function buildDots() {
+            dotsEl.innerHTML = '';
+            for (let i = 0; i < TOTAL; i++) {
+                const d = document.createElement('div');
+                d.className = 'dot' + (i === 0 ? ' active' : '');
+                d.onclick = () => goTo(i);
+                dotsEl.appendChild(d);
+            }
+        }
+        
+        function goTo(idx) {
+            if (idx < 0 || idx >= TOTAL) return;
+            current = idx;
+            const cardW = track.parentElement.offsetWidth;
+            track.style.transform = `translateX(-${current * (cardW + 14)}px)`;
+            counter.textContent = current + 1 + ' of ' + TOTAL;
+            prevBtn.disabled = current === 0;
+            nextBtn.disabled = current === TOTAL - 1;
+            dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+        }
+
+        function loadRouteMap(idx, mode, origin, dest, apiKey) {
+            const wrapper = document.getElementById('map-' + idx);
+            const loader = document.getElementById('load-' + idx);
+            const btn = document.getElementById('pin-btn-' + idx);
+            
+            if (btn) btn.style.display = 'none';
+            if (loader) loader.style.display = 'flex';
+            wrapper.onclick = null; 
+
+            setTimeout(() => {
+                wrapper.classList.add('loaded');
+                if (loader) loader.style.display = 'none';
+                
+                let embedUrl;
+                // Official Google Maps Embed API URLs
+                if (origin && origin !== "") {
+                    embedUrl = `https://www.google.com/maps/embed/v1/directions?key=${apiKey}&origin=${origin}&destination=${dest}&mode=${mode}`;
+                } else {
+                    embedUrl = `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${dest}`;
+                }
+                
+                wrapper.innerHTML = `<iframe id="iframe-${idx}" src="${embedUrl}" allowfullscreen loading="lazy"></iframe>`;
+            }, 300);
+        }
+
+        function switchMode(idx, mode, origin, dest, apiKey) {
+            document.getElementById(`btn-driving-${idx}`)?.classList.remove('active');
+            document.getElementById(`btn-walking-${idx}`)?.classList.remove('active');
+            document.getElementById(`btn-${mode}-${idx}`)?.classList.add('active');
+
+            const iframe = document.getElementById(`iframe-${idx}`);
+            if (iframe) {
+                iframe.src = `https://www.google.com/maps/embed/v1/directions?key=${apiKey}&origin=${origin}&destination=${dest}&mode=${mode}`;
+            } else {
+                loadRouteMap(idx, mode, origin, dest, apiKey);
+            }
+        }
+
+        buildDots();
+
+        function reportHeight() {
+            const h = document.documentElement.scrollHeight;
+            parent.postMessage({ type: 'iframe:height', height: h }, '*');
+        }
+        window.addEventListener('load', reportHeight);
+        new ResizeObserver(reportHeight).observe(document.body);
+    </script>
+</body>
+</html>

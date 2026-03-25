@@ -1,0 +1,6 @@
+fastapi 
+googlemaps 
+open-webui 
+python-dotenv 
+slowapi
+uvicorn 
