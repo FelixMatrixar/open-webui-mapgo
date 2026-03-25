@@ -31,12 +31,16 @@ async def add_security_headers(request: Request, call_next):
     # 🛡️ The Corrected CSP
     csp = (
         "default-src 'self'; "
-        "frame-src https://www.google.com http://googleusercontent.com; "
+        "frame-src 'self' https://www.google.com http://googleusercontent.com; "
         "style-src 'self' 'unsafe-inline'; "
-        "script-src 'self' 'unsafe-inline' https://unpkg.com;"
+        "script-src 'self' 'unsafe-inline' https://unpkg.com https://maps.googleapis.com https://maps.gstatic.com; "
+        "connect-src 'self' https://maps.googleapis.com; "
+        "img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com;"
     )
     
     response.headers["Content-Security-Policy"] = csp
     response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    # 🛡️ Allow both /maps-embed AND the root path / to be iframed
+    if request.url.path == "/":
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
     return response

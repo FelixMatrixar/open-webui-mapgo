@@ -10,12 +10,13 @@ from slowapi.util import get_remote_address
 from jinja2.exceptions import TemplateNotFound, TemplateError 
 
 from app.services.gmaps import search_places, get_batch_etas
-from app.config import FRONTEND_MAPS_KEY
+from app.config import FRONTEND_MAPS_KEY 
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
 templates = Jinja2Templates(directory="app/templates")
+BACKEND_BASE_URL = "http://localhost:8000"
 
 @router.get("/locator", response_class=HTMLResponse)
 @limiter.limit("5/minute")
@@ -74,7 +75,7 @@ async def find_location(request: Request, query: str, user_location: str = ""):
                 "request": request, 
                 "places": top_places, 
                 "user_location": urllib.parse.quote(user_location) if user_location else "",
-                "frontend_api_key": FRONTEND_MAPS_KEY
+                "maps_key": FRONTEND_MAPS_KEY
             },
             headers={"Content-Disposition": "inline", "X-MapGO-Places": safe_header_names}
         )
@@ -123,7 +124,6 @@ async def plan_itinerary(request: Request, stops: str, user_location: str = ""):
         embed_url = f"https://www.google.com/maps/embed/v1/directions?key={FRONTEND_MAPS_KEY}&origin={origin_enc}&destination={dest_enc}&mode=driving"
         if waypoints_str:
             embed_url += f"&waypoints={waypoints_str}"
-
         dir_url = f"https://www.google.com/maps/dir/?api=1&origin={origin_enc}&destination={dest_enc}"
         if waypoints_str:
             dir_url += f"&waypoints={waypoints_str}"
