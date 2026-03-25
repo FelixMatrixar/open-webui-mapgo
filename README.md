@@ -3,7 +3,8 @@
 > **AI-powered location assistant** — integrates a FastAPI backend with Open WebUI to deliver interactive, map-based place search and itinerary planning directly inside LLM conversations.
 
 ---
-*(Drag and drop your best overall video here — likely "4. Card Map Execution and Result.mp4" or "3. Main Execution.mp4")*
+### 🌟 See it in Action
+<video src="assets/3.%20Main%20Execution.mp4" controls="controls" muted="muted" width="100%"></video>
 
 ---
 
@@ -11,9 +12,9 @@
 
 | 📍 Place Search & Interactive Maps | 🗺️ Multi-Stop Itinerary Planner |
 |:---:|:---:|
-| *(Drag "3. Main Execution.mp4" here)* <br> **1. Natural Language Search** | *(Drag "5. Itinerary Map Execution and Result.mp4" here)* <br> **1. Planning a Day Trip** |
-| *(Drag "4.B Card Map OnClick Details.mp4" here)* <br> **2. Interactive Place Cards** | *(Drag "5.A Itinerary Map OnClick Result.mp4" here)* <br> **2. Interactive Timelines** |
-| *(Drag "4.A Card OnClick Direction.mp4" here)* <br> **3. One-Click Directions** | *(Drag "1. Activate Location.mp4" here)* <br> **3. Using GPS Coordinates** |
+| <video src="assets/4.B%20Card%20Map%20OnClick%20Details.mp4" controls muted width="100%"></video> <br> **1. Interactive Place Cards** | <video src="assets/5.%20Itinerary%20Map%20Execution%20and%20Result.mp4" controls muted width="100%"></video> <br> **1. Planning a Day Trip** |
+| <video src="assets/4.A%20Card%20OnClick%20Direction.mp4" controls muted width="100%"></video> <br> **2. One-Click Directions** | <video src="assets/5.A%20Itinerary%20Map%20OnClick%20Result.mp4" controls muted width="100%"></video> <br> **2. Interactive Timelines** |
+| <video src="assets/4.%20Card%20Map%20Execution%20and%20Result.mp4" controls muted width="100%"></video> <br> **3. Map Execution** | <video src="assets/1.%20Activate%20Location.mp4" controls muted width="100%"></video> <br> **3. Using GPS Coordinates** |
 
 ---
 
