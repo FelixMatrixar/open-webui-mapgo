@@ -1,5 +1,7 @@
 fastapi 
-googlemaps 
+googlemaps
+httpx 
+jinja2
 open-webui 
 python-dotenv 
 slowapi
