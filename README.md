@@ -11,13 +11,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 ## 🎥 Features Showcase
 
 | 📍 Place Search & Interactive Maps | 🗺️ Multi-Stop Itinerary Planner |
 |:---:|:---:|
-| <video src="assets/4B_Card_Map_OnClick_Details.mp4" controls muted width="100%"></video> <br> **1. Interactive Place Cards** | <video src="assets/5_Itinerary_Map_Execution_and_Result.mp4" controls muted width="100%"></video> <br> **1. Planning a Day Trip** |
-| <video src="assets/4A_Card_OnClick_Direction.mp4" controls muted width="100%"></video> <br> **2. One-Click Directions** | <video src="assets/5A_Itinerary_Map_OnClick_Result.mp4" controls muted width="100%"></video> <br> **2. Interactive Timelines** |
-| <video src="assets/4_Card_Map_Execution_and_Result.mp4" controls muted width="100%"></video> <br> **3. Map Execution** | <video src="https://github.com/user-attachments/assets/54ad7591-6f71-4bf0-9115-fc11ad5cbba4" controls muted width="100%"></video> <br> **3. Using GPS Coordinates** |
+| <video src="https://github.com/user-attachments/assets/2a2be351-a264-41a5-be1d-60fd27f35721" controls muted width="100%"></video> <br> **1. Interactive Place Cards** | <video src="assets/5_Itinerary_Map_Execution_and_Result.mp4" controls muted width="100%"></video> <br> **1. Planning a Day Trip** |
+| <video src="https://github.com/user-attachments/assets/fa8e16d2-e9e0-45f5-b696-2addb9ea34e8" controls muted width="100%"></video> <br> **2. One-Click Directions** | <video src="assets/5A_Itinerary_Map_OnClick_Result.mp4" controls muted width="100%"></video> <br> **2. Interactive Timelines** |
+| <video src="https://github.com/user-attachments/assets/629bccd8-f20d-4563-83ad-e764a88b85f7" controls muted width="100%"></video> <br> **3. Map Execution** | <video src="https://github.com/user-attachments/assets/54ad7591-6f71-4bf0-9115-fc11ad5cbba4" controls muted width="100%"></video> <br> **3. Using GPS Coordinates** |
 
 ---
 
