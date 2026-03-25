@@ -3,6 +3,19 @@
 > **AI-powered location assistant** — integrates a FastAPI backend with Open WebUI to deliver interactive, map-based place search and itinerary planning directly inside LLM conversations.
 
 ---
+*(Drag and drop your best overall video here — likely "4. Card Map Execution and Result.mp4" or "3. Main Execution.mp4")*
+
+---
+
+## 🎥 Features Showcase
+
+| 📍 Place Search & Interactive Maps | 🗺️ Multi-Stop Itinerary Planner |
+|:---:|:---:|
+| *(Drag "3. Main Execution.mp4" here)* <br> **1. Natural Language Search** | *(Drag "5. Itinerary Map Execution and Result.mp4" here)* <br> **1. Planning a Day Trip** |
+| *(Drag "4.B Card Map OnClick Details.mp4" here)* <br> **2. Interactive Place Cards** | *(Drag "5.A Itinerary Map OnClick Result.mp4" here)* <br> **2. Interactive Timelines** |
+| *(Drag "4.A Card OnClick Direction.mp4" here)* <br> **3. One-Click Directions** | *(Drag "1. Activate Location.mp4" here)* <br> **3. Using GPS Coordinates** |
+
+---
 
 ## Table of Contents
 
