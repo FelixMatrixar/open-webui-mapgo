@@ -12,15 +12,9 @@
 
 | 📍 Place Search & Interactive Maps | 🗺️ Multi-Stop Itinerary Planner |
 |:---:|:---:|
-<<<<<<< HEAD
 | <video src="assets/4B_Card_Map_OnClick_Details.mp4" controls muted width="100%"></video> <br> **1. Interactive Place Cards** | <video src="assets/5_Itinerary_Map_Execution_and_Result.mp4" controls muted width="100%"></video> <br> **1. Planning a Day Trip** |
 | <video src="assets/4A_Card_OnClick_Direction.mp4" controls muted width="100%"></video> <br> **2. One-Click Directions** | <video src="assets/5A_Itinerary_Map_OnClick_Result.mp4" controls muted width="100%"></video> <br> **2. Interactive Timelines** |
 | <video src="assets/4_Card_Map_Execution_and_Result.mp4" controls muted width="100%"></video> <br> **3. Map Execution** | <video src="assets/1_Activate_Location.mp4" controls muted width="100%"></video> <br> **3. Using GPS Coordinates** |
-=======
-| <video src="assets/4.B%20Card%20Map%20OnClick%20Details.mp4" controls muted width="100%"></video> <br> **1. Interactive Place Cards** | <video src="assets/5.%20Itinerary%20Map%20Execution%20and%20Result.mp4" controls muted width="100%"></video> <br> **1. Planning a Day Trip** |
-| <video src="assets/4.A%20Card%20OnClick%20Direction.mp4" controls muted width="100%"></video> <br> **2. One-Click Directions** | <video src="assets/5.A%20Itinerary%20Map%20OnClick%20Result.mp4" controls muted width="100%"></video> <br> **2. Interactive Timelines** |
-| <video src="assets/4.%20Card%20Map%20Execution%20and%20Result.mp4" controls muted width="100%"></video> <br> **3. Map Execution** | <video src="[assets/1.%20Activate%20Location.mp4](https://github.com/FelixMatrixar/open-webui-mapgo/blob/main/assets/1.%20Activate%20Location.mp4)" controls muted width="100%"></video> <br> **3. Using GPS Coordinates** |
->>>>>>> 46876128238e29a039777c9cb260d9c911d6f5d8
 
 ---
 
